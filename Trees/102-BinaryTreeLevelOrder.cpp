@@ -1,10 +1,4 @@
-#include <iostream>
-#include <list>
-#include <map>
-#include <vector>
-#include <stack>
-#include <queue>
-
+#include <bits/stdc++.h>
 using namespace std;
 
 struct TreeNode
@@ -39,7 +33,38 @@ public:
     vector<vector<int>> levelOrder(TreeNode *root)
     {
         preorder(root, level);
-        
+
+        return matrix;
+    }
+};
+
+// ITERATIVE APPROACH USING QUEUE/BFS
+class SolutionIterative
+{
+public:
+    vector<vector<int>> levelOrder(TreeNode *root)
+    {
+        if (root == NULL)
+            return {};
+        vector<vector<int>> matrix;
+        queue<TreeNode *> queue;
+        queue.push(root);
+        while (!queue.empty())
+        {
+            int size = queue.size();
+            vector<int> list;
+            for (int i = 0; i < size; i++)
+            {
+                TreeNode *curr = queue.front();
+                queue.pop();
+                list.push_back(curr->val);
+                if (curr->left)
+                    queue.push(curr->left);
+                if (curr->right)
+                    queue.push(curr->right);
+            }
+            matrix.push_back(list);
+        }
         return matrix;
     }
 };
