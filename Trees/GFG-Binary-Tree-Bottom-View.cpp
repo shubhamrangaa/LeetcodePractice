@@ -8,39 +8,31 @@ struct Node
     Node *right;
 };
 
-map<int, pair<int, int>>
-    hashMap;
-
-void helper(Node *root, int breadth, int level)
-{
-    if (root == NULL)
-        return;
-
-    if (!hashMap[breadth].second || level > hashMap[breadth].first)
-    {
-        hashMap[breadth].first = level;
-        hashMap[breadth].second = root->data;
-    }
-    else if (level == hashMap[breadth].first)
-    {
-        hashMap[breadth].first = level;
-        hashMap[breadth].second = root->data;
-    }
-
-    helper(root->left, breadth - 1, level + 1);
-    helper(root->right, breadth + 1, level + 1);
-}
-
-//Function to return a list containing the bottom view of the given tree.
 vector<int> bottomView(Node *root)
 {
-    // Your Code Here
+    queue<pair<Node *, int>> queue; //queue storing the node and its breadth
+    map<int, int> hashMap;          // map storing breadth and the bottom most node value for that breadth
     vector<int> list;
-    helper(root, 0, 0);
+    queue.push({root, 0});
+    while (!queue.empty())
+    {
+        int size = queue.size();
+        for (int i = 0; i < size; i++)
+        {
+            auto curr = queue.front();
+            queue.pop();
+            int breadth = curr.second;
+            hashMap[breadth] = curr.first->data;
+            if (curr.first->left)
+                queue.push({curr.first->left, breadth - 1});
+            if (curr.first->right)
+                queue.push({curr.first->right, breadth + 1});
+        }
+    }
 
     for (auto x : hashMap)
     {
-        list.push_back(x.second.second);
+        list.push_back(x.second);
     }
     return list;
 }

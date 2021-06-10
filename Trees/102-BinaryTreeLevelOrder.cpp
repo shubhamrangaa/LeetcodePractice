@@ -68,3 +68,34 @@ public:
         return matrix;
     }
 };
+
+// RECURSIVE METHOD
+// FAILED A FEW TESTCASES
+map<int, pair<int, int>> hashMap;
+void traverse(Node *root, int breadth, int level)
+{
+    if (root == NULL)
+        return;
+    if (hashMap.find(breadth) == hashMap.end())
+    {
+        hashMap[breadth] = make_pair(level, root->data);
+    }
+    else if (level >= hashMap[breadth].first)
+    {
+        hashMap[breadth].first = level;
+        hashMap[breadth].second = root->data;
+    }
+    traverse(root->left, breadth - 1, level + 1);
+    traverse(root->right, breadth + 1, level + 1);
+}
+vector<int> bottomView(Node *root)
+{
+    vector<int> list;
+    traverse(root, 0, 0);
+
+    for (auto x : hashMap)
+    {
+        list.push_back(x.second.second);
+    }
+    return list;
+}
